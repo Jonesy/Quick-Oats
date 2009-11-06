@@ -1,7 +1,9 @@
 <?php
 
-define("Version", "0.1");
+define("Version", "0.17");
 define("Author", "Joshua Jones");
+define("VIEWS_DIR", "views");
+define("DEFAULT_TEMPLATE", "layout.php");
 
 function uri_dispatch()
 {
@@ -34,24 +36,16 @@ function views()
 	return $filelist;
 }
 
-function layout()
+function layout($template)
 {
-	$title = "Hello";
-	$include = APP_PATH . "views/about.php";
-	$layout = include(APP_PATH . "views/layout.php");
-	echo $layout;
-}
-
-function run(){
-	layout();
-	
 	$files = uri_dispatch();
-		
+	$num_uri = end(uri_dispatch());
+	
 	foreach ($files as $k => $file)
 	{
 		if (strlen($file) > 0)
 		{
-			echo "URI " . $k . ": " . $file . "<br>";
+			$which = $file;
 		}
 	}
 	
@@ -59,6 +53,14 @@ function run(){
 	
 	foreach ($temps as $file)
 	{
-		echo $file . '<br>';
+		$include = APP_PATH . VIEWS_DIR . "/" . $which . '.php';
 	}
+	$title = "Hello";
+	//$include = APP_PATH . "views/about.php";
+
+	$layout = include(APP_PATH . VIEWS_DIR . "/" . DEFAULT_TEMPLATE);
+}
+
+function run(){
+	layout();
 }

@@ -49,17 +49,26 @@ function layout($template)
 			$which = $file;
 		}
 	}
-	
+
 	// If the template exists, load it, otherwise 404 it
-	if (file_exists(APP_PATH . VIEWS_DIR . "/" . $num_uri . ".php"))
+	if (count($files) == 0)
 	{
 		$title = "Hello";
-		$include = APP_PATH . VIEWS_DIR . "/" . $which . ".php";
+		$include = APP_PATH . VIEWS_DIR . "/index.php";
 	}
-	   else
+		else
 	{
-		$title = "404";
-		$include = APP_PATH . VIEWS_DIR . "/404.php";
+	
+		if (file_exists(APP_PATH . VIEWS_DIR . "/" . $num_uri . ".php"))
+		{
+			$title = "Hello";
+			$include = APP_PATH . VIEWS_DIR . "/" . $which . ".php";
+		}
+		   else
+		{
+			$title = "404";
+			$include = APP_PATH . VIEWS_DIR . "/404.php";
+		}
 	}
 	
 	$layout = include(APP_PATH . VIEWS_DIR . "/" . DEFAULT_TEMPLATE);

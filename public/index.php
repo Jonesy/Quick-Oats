@@ -9,6 +9,5 @@ require_once APP_PATH . 'nancy.php';
 run();
 
 /*
- * -----------------------------------
- * End of index.php
+ *	/end of index.php
  */

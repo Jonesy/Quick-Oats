@@ -1,41 +1,42 @@
 <?php
+/*	UNNAMED PHP FRAMEWORK
+ *	By Joshua R. Jones for The General Metrics Web Development Company
+ *
+ *	License is do whatever you want.
+*/
 
 define("Version", "0.17");
 define("Author", "Joshua Jones");
 define("VIEWS_DIR", "views");
 define("DEFAULT_TEMPLATE", "layout.php");
 
+
+/*
+ *	URI DISPATCH
+ *	Interpert the incoming URI
+*/
 function uri_dispatch()
 {
-	$uri = $_SERVER['REQUEST_URI'];
+	$uri = $_SERVER['PATH_INFO'];
 	$slice = substr($uri, 1);
 	$split = explode("/", $slice);
-	return $split;
-}
-
-function views()
-{
-	$dir = APP_PATH . "views/";
-	$view_folder = opendir($dir);
 	
-	$filelist = array();
-	
-	while ($templates = readdir($view_folder))
+	foreach($split as $k => $v)
 	{
-		if ($templates != ".." && $templates != '.' && $templates != "layout.php")
+		if (empty($v))
 		{
-			if (!is_dir($view_folder))
-			{
-				$filelist[] = $templates;
-			}
+			unset($split[$k]);
 		}
 	}
 	
-	closedir($dir);
-	
-	return $filelist;
+	return $split;
 }
 
+
+/*
+ *	LAYOUT
+ *	Load the default layout field
+ */
 function layout($template)
 {
 	$files = uri_dispatch();
@@ -49,18 +50,29 @@ function layout($template)
 		}
 	}
 	
-	$temps = views();
-	
-	foreach ($temps as $file)
+	// If the template exists, load it, otherwise 404 it
+	if (file_exists(APP_PATH . VIEWS_DIR . "/" . $num_uri . ".php"))
 	{
-		$include = APP_PATH . VIEWS_DIR . "/" . $which . '.php';
+		$title = "Hello";
+		$include = APP_PATH . VIEWS_DIR . "/" . $which . ".php";
 	}
-	$title = "Hello";
-	//$include = APP_PATH . "views/about.php";
-
+	   else
+	{
+		$title = "404";
+		$include = APP_PATH . VIEWS_DIR . "/404.php";
+	}
+	
 	$layout = include(APP_PATH . VIEWS_DIR . "/" . DEFAULT_TEMPLATE);
 }
 
-function run(){
+/*
+ *	RUN!!!!!!
+ */
+function run()
+{
 	layout();
 }
+
+/*
+ *	/end of nancy.php
+ */

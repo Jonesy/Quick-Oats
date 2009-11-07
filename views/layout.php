@@ -4,12 +4,11 @@
 		<title><?php echo SITE_NAME . " - " . $title; ?></title>
 		<style type="text/css">
 			body {
-				font: 14/16px "HelveticaNeue-Light", Helvetica, Arial, sans-serif;
+				font: 14/16px "HelveticaNeue-Light", Helvetica, Arial, sans-serif normal;
 			}
 		</style>
 	</head>
 	<body>
-		<h1>Please load:</h1>
 		<?php include($include); ?>
 	</body>
 </html>

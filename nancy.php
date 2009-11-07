@@ -1,14 +1,18 @@
-<?php
-/*	UNNAMED PHP FRAMEWORK
- *	By Joshua R. Jones for The General Metrics Web Development Company
+<?php if (!defined('SITE')) exit('No direct script access allowed');
+
+/*
+ *	CODENAME NANCY
+ *	By Joshua R. Jones
  *
+ *	2009 (c) Copyright The General Metrics Web Development Company
  *	License is do whatever you want.
 */
 
-define("Version", "0.17");
-define("Author", "Joshua Jones");
-define("VIEWS_DIR", "views");
-define("DEFAULT_TEMPLATE", "layout.php");
+
+define("Version",			"0.1");
+define("Author",			"Joshua Jones");
+define("VIEWS_DIR",			"views");
+define("DEFAULT_TEMPLATE",	"layout.php");
 
 
 /*
@@ -21,7 +25,7 @@ function uri_dispatch()
 	$slice = substr($uri, 1);
 	$split = explode("/", $slice);
 	
-	foreach($split as $k => $v)
+	foreach ($split as $k => $v)
 	{
 		if (empty($v))
 		{
@@ -61,17 +65,60 @@ function layout($template)
 	
 		if (file_exists(APP_PATH . VIEWS_DIR . "/" . $num_uri . ".php"))
 		{
-			$title = "Hello";
 			$include = APP_PATH . VIEWS_DIR . "/" . $which . ".php";
 		}
 		   else
 		{
-			$title = "404";
 			$include = APP_PATH . VIEWS_DIR . "/404.php";
 		}
 	}
 	
 	$layout = include(APP_PATH . VIEWS_DIR . "/" . DEFAULT_TEMPLATE);
+}
+
+/*
+ *	HELPERS
+ *
+ */
+function stylesheets($styles)
+{
+	if (is_array($styles))
+	{
+		$css = "";
+		
+		foreach ($styles as $style)
+		{
+			$mod = filemtime(APP_PATH . "public/stylesheets/" . $style[0] . ".css");
+			
+			$css .= '<link rel="stylesheet" href="/stylesheets/' . $style[0] . '.css';
+			$css .= '?' . $mod . '" ';
+			$css .= 'media="'. $style[1] . '" ';
+			$css .= 'type="text/css"/>';
+			$css .= "\r\t\t";
+		}
+	}
+	
+	else
+	{
+		$css .= "hi";
+	}
+	
+	echo $css;
+}
+
+/*
+ *	Google Analytics
+ */
+function google_analytics($gid)
+{
+	$ga  = '<script type="text/javascript">';
+	$ga .= 'var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");';
+	$ga .= 'document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));';
+	$ga .= '</script><script type="text/javascript">';
+	$ga .= 'try {var pageTracker = _gat._getTracker("' . $gid . '");pageTracker._trackPageview();} catch(err) {}';
+	$ga .= '</script>';
+	$ga .= "\r";
+	echo $ga;
 }
 
 /*

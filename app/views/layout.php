@@ -13,18 +13,15 @@ $styles = array(
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>Demo</title>
 		
-		<?php stylesheets($styles); ?>
+		<?php echo stylesheets($styles); ?>
 		
 	</head>
 	<body>
-		<ul>
-			<li><a href="/">Home</a></li>
-			<li><a href="/hello">Hello</a></li>
-			<li><a href="/world">World</a></li>
-		</ul>
+		<?php echo build_nav(); ?>
+		
 		<?php include($include); ?>
 		
-		<?php google_analytics(""); ?>
+		<?php echo google_analytics("asdf"); ?>
 		
 	</body>
 </html>

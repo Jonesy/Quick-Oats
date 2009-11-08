@@ -21,7 +21,6 @@ define('Author',			'Joshua Jones');
 define('VIEWS_DIR',			'views');
 define('DEFAULT_TEMPLATE',	'layout.php');
 
-
 /*
  *	URI DISPATCH
  *	-----------------------
@@ -107,7 +106,7 @@ function stylesheets($styles)
 		
 		foreach ($styles as $style)
 		{
-			$mod = filemtime(APP_PATH . "public/stylesheets/" . $style[0] . ".css");
+			$mod = filemtime(PUBLIC_PATH . "public/stylesheets/" . $style[0] . ".css");
 			$css .= '<link rel="stylesheet" href="/stylesheets/' . $style[0] . '.css';
 			$css .= '?' . $mod . '" ';
 			$css .= 'media="'. $style[1] . '" ';
@@ -115,7 +114,7 @@ function stylesheets($styles)
 			$css .= "\r\t\t";
 		}
 	}
-	echo $css;
+	return $css;
 }
 
 /*
@@ -133,7 +132,7 @@ function javascripts($js)
 		
 		foreach ($js as $scripts)
 		{
-			$mod = filemtime(APP_PATH . "public/javascripts/" . $scripts[0] . ".css");
+			$mod = filemtime(PUBLIC_PATH . "public/javascripts/" . $scripts[0] . ".css");
 			$scriptfile .= '<script type="text/javascript" src="/javascripts/' . $scripts[0] . '.js';
 			$scriptfile .= '?' . $mod . '"';
 			$scriptfile .= '"></script>';
@@ -166,7 +165,34 @@ function google_analytics($gid)
 	}
 }
 
+function build_nav()
+{
+	require_once APP_PATH . 'models/nav_model.php';
+	$uri = uri_dispatch();
+	
+	$li = '<li><a href="/">Home</a></li>';
+	foreach ($nav as $navitem)
+	{
+		if ($uri[0] == strtolower($navitem))
+		{
+			$li .= '<li class="active">';
+		}
+		else
+		{
+			$li .= '<li>';
+		}
+		
+		$li .= '<a href="' . strtolower($navitem) . '">' . $navitem . '</a>';
+		$li .= '</li>';
+	}
+	
+	return $li;
+}
+
 /*	RUN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-function run(){layout();}
+function run()
+{
+	layout();
+}
 
 /* End of nancy.php */

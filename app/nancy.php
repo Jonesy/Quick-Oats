@@ -10,6 +10,9 @@
  *	== TODO =====================================================
  *	=	* Google Sitemap builder
  *	=	* Navigation builder
+ *	=	* Mailer
+ *	=	* Form builder
+ *	=	* Environments
  *	=============================================================
 */
 
@@ -21,7 +24,10 @@ define('DEFAULT_TEMPLATE',	'layout.php');
 
 /*
  *	URI DISPATCH
+ *	-----------------------
  *	Interpert the incoming URI
+ *
+ *	@return array
  */
 function uri_dispatch()
 {
@@ -43,7 +49,10 @@ function uri_dispatch()
 
 /*
  *	LAYOUT
+ *	-----------------------
  *	Load the default layout field
+ *
+ *	@return string
  */
 function layout($template)
 {
@@ -87,6 +96,8 @@ function layout($template)
  *	STYLESHEETS
  *	-----------------------
  *	Load in 1 or more CSS files. Caching control is added in.
+ *
+ *	@return string
  */
 function stylesheets($styles)
 {
@@ -111,6 +122,8 @@ function stylesheets($styles)
  *	JAVASCRIPTS
  *	-----------------------
  *	Load in 1 or more JavaScript files. Caching control is added in.
+ *
+ *	@return string
  */
 function javascripts($js)
 {
@@ -127,13 +140,15 @@ function javascripts($js)
 			$scriptfile .= "\r\t\t";
 		}
 	}
-	echo $scriptfile;
+	return $scriptfile;
 }
 
 /*
  *	Google Analytics
  *	-------------------------
  *	A cleaner way to insert Google Analytics code (legacy) in your website.
+ *
+ *	@return string
  */
  
 function google_analytics($gid)
@@ -147,7 +162,7 @@ function google_analytics($gid)
 		$ga .= 'try {var pageTracker = _gat._getTracker("' . $gid . '");pageTracker._trackPageview();} catch(err) {}';
 		$ga .= '</script>';
 		$ga .= "\r";
-		echo $ga;
+		return $ga;
 	}
 }
 

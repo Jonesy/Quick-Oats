@@ -15,11 +15,6 @@ $styles = array(
 		
 		<?php stylesheets($styles); ?>
 		
-		<style type="text/css">
-			body {
-				font: 14px "HelveticaNeue-Light", Helvetica, Arial, sans-serif normal;
-			}
-		</style>
 	</head>
 	<body>
 		<ul>
@@ -30,5 +25,6 @@ $styles = array(
 		<?php include($include); ?>
 		
 		<?php google_analytics(""); ?>
+		
 	</body>
 </html>

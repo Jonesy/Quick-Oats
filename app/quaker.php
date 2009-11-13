@@ -1,7 +1,7 @@
 <?php if (!defined('APP_PATH')) exit('No direct script access allowed');
 
 /*
- *	CODENAME NANCY
+ *	QUAKER OATS
  *	By Joshua R. Jones
  *
  *	2009 (c) Copyright The General Metrics Web Development Company
@@ -16,35 +16,10 @@
  *	=============================================================
 */
 
-/*
- *	URI DISPATCH
- *	-----------------------
- *	Interpert the incoming URI
- *
- *	@return array
- */
- 
 class Quaker
 {
 	function __construct()
 	{
-		function uri_dispatch()
-		{
-			$uri = $_SERVER['PATH_INFO'];
-			$slice = substr($uri, 1);
-			$split = explode("/", $slice);
-			
-			foreach ($split as $k => $v)
-			{
-				if (empty($v))
-				{
-					unset($split[$k]);
-				}
-			}
-			
-			return $split;
-		}
-		
 		$sow = new Harvest();
 		$sow->layout();
 	}
@@ -58,11 +33,41 @@ class Quaker
  */
 class Harvest
 {
+	var $uri_array;
+
+	/*
+	 *	URI DISPATCH
+	 *	-----------------------
+	 *	Interpert the incoming URI
+	 *
+	 *	@return array
+	 */
+	function uri_dispatch()
+	{
+		$uri = $_SERVER['PATH_INFO'];
+		$slice = substr($uri, 1);
+		$this->uri_array = explode("/", $slice);
+		
+		foreach ($this->uri_array as $k => $v)
+		{
+		  if (empty($v))
+		  {
+		  	unset($this->uri_array[$k]);
+		  }
+		}
+		return $this->uri_array;
+	}
+	
+
 	function layout()
 	{
-		$files = uri_dispatch();
-		$num_uri = end(uri_dispatch());
+		// Load config file, helpers
+		require_once APP_PATH . 'models/config.php';
 		$helper = new Farmhand();
+		
+		// Set up vars
+		$files = $this->uri_dispatch();
+		$num_uri = end($files);
 		
 		foreach ($files as $k => $file)
 		{
@@ -71,27 +76,28 @@ class Harvest
 				$which = $file;
 			}
 		}
-		
-		// If the template exists, load it, otherwise 404 it
+
+		//If the template exists, load it, otherwise 404 it
 		if (count($files) == 0)
 		{
-			$title = "Hello";
-			$include = APP_PATH . VIEWS_DIR . "/index.php";
+			$include = APP_PATH . "views/index.php";
+			$layout = include(APP_PATH . "views/layout.php");
 		}
-			else
+		  else
 		{
-			if (file_exists(APP_PATH . VIEWS_DIR . "/" . $num_uri . ".php"))
+			if (file_exists(APP_PATH . "views/" . $num_uri . ".php"))
 			{
-				$include = APP_PATH . VIEWS_DIR . "/" . $which . ".php";
+				$include = APP_PATH . "views/" . $which . ".php";
+				$layout = include(APP_PATH . "views/layout.php");
 			}
 			   else
 			{
-				$include = APP_PATH . VIEWS_DIR . "/404.php";
+				$layout = include(APP_PATH . "views/404.php");
 			}
 		}
-		$layout = include(APP_PATH . VIEWS_DIR . "/" . DEFAULT_TEMPLATE);
 	}
 }
+
 /*
  *	HELPERS
  *
@@ -105,8 +111,6 @@ class Farmhand
 	 *
 	 *	@return string
 	 */
-	
-	
 	function stylesheets($styles)
 	{
 		if (is_array($styles))
@@ -177,12 +181,12 @@ class Farmhand
 	function build_nav()
 	{
 		require_once APP_PATH . 'models/nav_model.php';
-		$uri = uri_dispatch();
+		$url = $this->uri_dispatch();
 		
 		$li = '<li><a href="/">Home</a></li>';
 		foreach ($nav as $navitem)
 		{
-			if ($uri[0] == strtolower($navitem))
+			if ($url[0] == strtolower($navitem))
 			{
 				$li .= '<li class="active">';
 			}

@@ -2,14 +2,12 @@
 
 error_reporting(E_ALL);
 
-define("PUBLIC_PATH", dirname(dirname(__FILE__)) . "/");
-define("APP_PATH", dirname(dirname(__FILE__)) . "/app/");
 define('Version',			'0.1');
-define('Author',			'Joshua Jones');
-define('VIEWS_DIR',			'views');
-define('DEFAULT_TEMPLATE',	'layout.php');
+define('SITE_NAME',			'Demo Site');
+define("PUBLIC_PATH",		dirname(dirname(__FILE__)) . "/");
+define("APP_PATH",			dirname(dirname(__FILE__)) . "/app/");
 
-require_once APP_PATH . 'nancy.php';
+require_once APP_PATH . 'quaker.php';
 
 $oats = new Quaker();
 

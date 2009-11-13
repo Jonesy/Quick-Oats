@@ -14,15 +14,15 @@ $styles = array(
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>Demo</title>
 		
-		<?php echo $farmhand->stylesheets($styles); ?>
+		<?php echo $helper->stylesheets($styles); ?>
 		
 	</head>
 	<body>
-		<?php echo $farmhand->build_nav(); ?>
+		<?php echo $helper->build_nav(); ?>
 		
 		<?php include($include); ?>
 		
-		<?php echo $farmhand->google_analytics("asdf"); ?>
+		<?php echo $helper->google_analytics("asdf"); ?>
 		
 	</body>
 </html>

@@ -62,7 +62,7 @@ class Harvest
 	{
 		$files = uri_dispatch();
 		$num_uri = end(uri_dispatch());
-		$farmhand = new Helper();
+		$helper = new Farmhand();
 		
 		foreach ($files as $k => $file)
 		{
@@ -96,7 +96,7 @@ class Harvest
  *	HELPERS
  *
  */
-class Helper
+class Farmhand
 {
 	/*
 	 *	STYLESHEETS

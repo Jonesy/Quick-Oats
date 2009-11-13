@@ -1,4 +1,4 @@
-<?php if (!defined('SITE')) exit('No direct script access allowed');
+<?php if (!defined('APP_PATH')) exit('No direct script access allowed');
 
 /*
  *	CODENAME NANCY
@@ -16,11 +16,6 @@
  *	=============================================================
 */
 
-define('Version',			'0.1');
-define('Author',			'Joshua Jones');
-define('VIEWS_DIR',			'views');
-define('DEFAULT_TEMPLATE',	'layout.php');
-
 /*
  *	URI DISPATCH
  *	-----------------------
@@ -28,24 +23,32 @@ define('DEFAULT_TEMPLATE',	'layout.php');
  *
  *	@return array
  */
-function uri_dispatch()
+ 
+class Quaker
 {
-	$uri = $_SERVER['PATH_INFO'];
-	$slice = substr($uri, 1);
-	$split = explode("/", $slice);
-	
-	foreach ($split as $k => $v)
+	function __construct()
 	{
-		if (empty($v))
+		function uri_dispatch()
 		{
-			unset($split[$k]);
+			$uri = $_SERVER['PATH_INFO'];
+			$slice = substr($uri, 1);
+			$split = explode("/", $slice);
+			
+			foreach ($split as $k => $v)
+			{
+				if (empty($v))
+				{
+					unset($split[$k]);
+				}
+			}
+			
+			return $split;
 		}
+		
+		$sow = new Harvest();
+		$sow->layout();
 	}
-	
-	return $split;
 }
-
-
 /*
  *	LAYOUT
  *	-----------------------
@@ -53,146 +56,148 @@ function uri_dispatch()
  *
  *	@return string
  */
-function layout($template)
+class Harvest
 {
-	$files = uri_dispatch();
-	$num_uri = end(uri_dispatch());
-	
-	foreach ($files as $k => $file)
+	function layout()
 	{
-		if (strlen($file) > 0)
+		$files = uri_dispatch();
+		$num_uri = end(uri_dispatch());
+		$farmhand = new Helper();
+		
+		foreach ($files as $k => $file)
 		{
-			$which = $file;
+			if (strlen($file) > 0)
+			{
+				$which = $file;
+			}
 		}
-	}
-
-	// If the template exists, load it, otherwise 404 it
-	if (count($files) == 0)
-	{
-		$title = "Hello";
-		$include = APP_PATH . VIEWS_DIR . "/index.php";
-	}
-		else
-	{
-		if (file_exists(APP_PATH . VIEWS_DIR . "/" . $num_uri . ".php"))
+		
+		// If the template exists, load it, otherwise 404 it
+		if (count($files) == 0)
 		{
-			$include = APP_PATH . VIEWS_DIR . "/" . $which . ".php";
+			$title = "Hello";
+			$include = APP_PATH . VIEWS_DIR . "/index.php";
 		}
-		   else
+			else
 		{
-			$include = APP_PATH . VIEWS_DIR . "/404.php";
+			if (file_exists(APP_PATH . VIEWS_DIR . "/" . $num_uri . ".php"))
+			{
+				$include = APP_PATH . VIEWS_DIR . "/" . $which . ".php";
+			}
+			   else
+			{
+				$include = APP_PATH . VIEWS_DIR . "/404.php";
+			}
 		}
+		$layout = include(APP_PATH . VIEWS_DIR . "/" . DEFAULT_TEMPLATE);
 	}
-	$layout = include(APP_PATH . VIEWS_DIR . "/" . DEFAULT_TEMPLATE);
 }
-
 /*
  *	HELPERS
  *
  */
- 
-/*
- *	STYLESHEETS
- *	-----------------------
- *	Load in 1 or more CSS files. Caching control is added in.
- *
- *	@return string
- */
-function stylesheets($styles)
+class Helper
 {
-	if (is_array($styles))
-	{
-		$css = "";
-		
-		foreach ($styles as $style)
-		{
-			$mod = filemtime(PUBLIC_PATH . "public/stylesheets/" . $style[0] . ".css");
-			$css .= '<link rel="stylesheet" href="/stylesheets/' . $style[0] . '.css';
-			$css .= '?' . $mod . '" ';
-			$css .= 'media="'. $style[1] . '" ';
-			$css .= 'type="text/css"/>';
-			$css .= "\r\t\t";
-		}
-	}
-	return $css;
-}
-
-/*
- *	JAVASCRIPTS
- *	-----------------------
- *	Load in 1 or more JavaScript files. Caching control is added in.
- *
- *	@return string
- */
-function javascripts($js)
-{
-	if (is_array($js))
-	{
-		$scriptfile = "";
-		
-		foreach ($js as $scripts)
-		{
-			$mod = filemtime(PUBLIC_PATH . "public/javascripts/" . $scripts[0] . ".css");
-			$scriptfile .= '<script type="text/javascript" src="/javascripts/' . $scripts[0] . '.js';
-			$scriptfile .= '?' . $mod . '"';
-			$scriptfile .= '"></script>';
-			$scriptfile .= "\r\t\t";
-		}
-	}
-	return $scriptfile;
-}
-
-/*
- *	Google Analytics
- *	-------------------------
- *	A cleaner way to insert Google Analytics code (legacy) in your website.
- *
- *	@return string
- */
- 
-function google_analytics($gid)
-{
-	if ($gid)
-	{
-		$ga  = '<script type="text/javascript">';
-		$ga .= 'var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");';
-		$ga .= 'document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));';
-		$ga .= '</script><script type="text/javascript">';
-		$ga .= 'try {var pageTracker = _gat._getTracker("' . $gid . '");pageTracker._trackPageview();} catch(err) {}';
-		$ga .= '</script>';
-		$ga .= "\r";
-		return $ga;
-	}
-}
-
-function build_nav()
-{
-	require_once APP_PATH . 'models/nav_model.php';
-	$uri = uri_dispatch();
+	/*
+	 *	STYLESHEETS
+	 *	-----------------------
+	 *	Load in 1 or more CSS files. Caching control is added in.
+	 *
+	 *	@return string
+	 */
 	
-	$li = '<li><a href="/">Home</a></li>';
-	foreach ($nav as $navitem)
+	
+	function stylesheets($styles)
 	{
-		if ($uri[0] == strtolower($navitem))
+		if (is_array($styles))
 		{
-			$li .= '<li class="active">';
+			$css = "";
+			
+			foreach ($styles as $style)
+			{
+				$mod = filemtime(PUBLIC_PATH . "public/stylesheets/" . $style[0] . ".css");
+				$css .= '<link rel="stylesheet" href="/stylesheets/' . $style[0] . '.css';
+				$css .= '?' . $mod . '" ';
+				$css .= 'media="'. $style[1] . '" ';
+				$css .= 'type="text/css"/>';
+				$css .= "\r\t\t";
+			}
 		}
-		else
-		{
-			$li .= '<li>';
-		}
-		
-		$li .= '<a href="' . strtolower($navitem) . '">' . $navitem . '</a>';
-		$li .= '</li>';
+		return $css;
 	}
 	
-	return $li;
-}
+	/*
+	 *	JAVASCRIPTS
+	 *	-----------------------
+	 *	Load in 1 or more JavaScript files. Caching control is added in.
+	 *
+	 *	@return string
+	 */
+	function javascripts($js)
+	{
+		if (is_array($js))
+		{
+			$scriptfile = "";
+			
+			foreach ($js as $scripts)
+			{
+				$mod = filemtime(PUBLIC_PATH . "public/javascripts/" . $scripts[0] . ".css");
+				$scriptfile .= '<script type="text/javascript" src="/javascripts/' . $scripts[0] . '.js';
+				$scriptfile .= '?' . $mod . '"';
+				$scriptfile .= '"></script>';
+				$scriptfile .= "\r\t\t";
+			}
+		}
+		return $scriptfile;
+	}
+	
+	/*
+	 *	Google Analytics
+	 *	-------------------------
+	 *	A cleaner way to insert Google Analytics code (legacy) in your website.
+	 *
+	 *	@return string
+	 */
+	 
+	function google_analytics($gid)
+	{
+		if ($gid)
+		{
+			$ga  = '<script type="text/javascript">';
+			$ga .= 'var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");';
+			$ga .= 'document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));';
+			$ga .= '</script><script type="text/javascript">';
+			$ga .= 'try {var pageTracker = _gat._getTracker("' . $gid . '");pageTracker._trackPageview();} catch(err) {}';
+			$ga .= '</script>';
+			$ga .= "\r";
+			return $ga;
+		}
+	}
+	
+	function build_nav()
+	{
+		require_once APP_PATH . 'models/nav_model.php';
+		$uri = uri_dispatch();
+		
+		$li = '<li><a href="/">Home</a></li>';
+		foreach ($nav as $navitem)
+		{
+			if ($uri[0] == strtolower($navitem))
+			{
+				$li .= '<li class="active">';
+			}
+			else
+			{
+				$li .= '<li>';
+			}
+			
+			$li .= '<a href="' . strtolower($navitem) . '">' . $navitem . '</a>';
+			$li .= '</li>';
+		}
+		
+		return $li;
+	}
 
-/*	RUN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
-function run()
-{
-	layout();
 }
 
 /* End of nancy.php */

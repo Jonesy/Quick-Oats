@@ -7,5 +7,5 @@
 
 $nav = array(
 	'Hello',
-	'World',
+		array('World'),
 );

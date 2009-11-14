@@ -18,31 +18,33 @@
 
 class Quaker
 {
+	var $style;
 	function __construct()
 	{
+		$this->style = $styles;
+		include( APP_PATH . 'models/nav_model.php');
 		$sow = new Harvest();
 		$sow->layout();
 	}
 }
-/*
- *	LAYOUT
- *	-----------------------
- *	Load the default layout field
- *
- *	@return string
- */
+
 class Harvest
 {
 	var $uri_array;
+	
+	function __construct()
+	{
+		include_once(APP_PATH . 'models/config.php');
+	}
 
 	/*
-	 *	URI DISPATCH
+	 *	Router
 	 *	-----------------------
 	 *	Interpert the incoming URI
 	 *
 	 *	@return array
 	 */
-	function uri_dispatch()
+	function router()
 	{
 		$uri = $_SERVER['PATH_INFO'];
 		$slice = substr($uri, 1);
@@ -58,16 +60,20 @@ class Harvest
 		return $this->uri_array;
 	}
 	
-
+	/*
+	 *	LAYOUT
+	 *	-----------------------
+	 *	Load the default layout field
+	 *
+	 *	@return string
+	 */
 	function layout()
 	{
 		// Load config file, helpers
-		require_once APP_PATH . 'models/config.php';
-		$helper = new Farmhand();
-		
+		echo $this->style;
 		// Set up vars
-		$files = $this->uri_dispatch();
-		$num_uri = end($files);
+		$files = $this->router();
+		$template_file = end($files);
 		
 		foreach ($files as $k => $file)
 		{
@@ -85,13 +91,14 @@ class Harvest
 		}
 		  else
 		{
-			if (file_exists(APP_PATH . "views/" . $num_uri . ".php"))
+			if (file_exists(APP_PATH . "views/" . $template_file . ".php"))
 			{
 				$include = APP_PATH . "views/" . $which . ".php";
 				$layout = include(APP_PATH . "views/layout.php");
 			}
 			   else
 			{
+				header("HTTP/1.0 404 Not Found");
 				$layout = include(APP_PATH . "views/404.php");
 			}
 		}
@@ -104,10 +111,15 @@ class Harvest
  */
 class Farmhand
 {
+	function __construct()
+	{
+
+	}
 	/*
 	 *	STYLESHEETS
 	 *	-----------------------
 	 *	Load in 1 or more CSS files. Caching control is added in.
+	 *	Assigned in models/config.php
 	 *
 	 *	@return string
 	 */
@@ -123,7 +135,7 @@ class Farmhand
 				$css .= '<link rel="stylesheet" href="/stylesheets/' . $style[0] . '.css';
 				$css .= '?' . $mod . '" ';
 				$css .= 'media="'. $style[1] . '" ';
-				$css .= 'type="text/css"/>';
+				$css .= 'type="text/css" />';
 				$css .= "\r\t\t";
 			}
 		}
@@ -134,6 +146,7 @@ class Farmhand
 	 *	JAVASCRIPTS
 	 *	-----------------------
 	 *	Load in 1 or more JavaScript files. Caching control is added in.
+	 *	Assigned in models/config.php
 	 *
 	 *	@return string
 	 */
@@ -149,10 +162,65 @@ class Farmhand
 				$scriptfile .= '<script type="text/javascript" src="/javascripts/' . $scripts[0] . '.js';
 				$scriptfile .= '?' . $mod . '"';
 				$scriptfile .= '"></script>';
-				$scriptfile .= "\r\t\t";
+				$scriptfile .= "\r";
 			}
 		}
 		return $scriptfile;
+	}
+	
+	/*
+	 *	META TAGS
+	 *	-----------------------
+	 *	Build out meta tags as defined in models/config.php
+	 *
+	 *	@return string
+	 */
+	function meta($meta)
+	{
+		$metatag;
+		
+		if (is_array($meta))
+		{
+			foreach ($meta as $k => $m)
+			{
+				if ($k == "author")
+				{
+					$metatag .= '<meta name="author" ';
+					$metatag .= 'content="' . $m . '" />';
+					$metatag .= "\r\t\t";
+				}
+				
+				if ($k == "keywords")
+				{
+					$metatag .= '<meta name="keywords" ';
+					$metatag .= 'content="' . $m . '" />';
+					$metatag .= "\r\t\t";
+				}
+				
+				if ($k == "description")
+				{
+					$metatag .= '<meta name="description" ';
+					$metatag .= 'content="' . $m . '" />';
+					$metatag .= "\r\t\t";
+				}
+				
+				if ($k == "copyright")
+				{
+					$metatag .= '<meta name="copyright" ';
+					$metatag .= 'content="' . $m . '" />';
+					$metatag .= "\r\t\t";
+				}
+				
+				if ($k == "robots")
+				{
+					$metatag .= '<meta name="robots" ';
+					$metatag .= 'content="' . $m . '" />';
+					$metatag .= "\r\t\t";
+				}
+			}
+		}
+		
+		return $metatag;
 	}
 	
 	/*
@@ -178,11 +246,10 @@ class Farmhand
 		}
 	}
 	
-	function build_nav()
+	function site_nav()
 	{
-		require_once APP_PATH . 'models/nav_model.php';
-		$url = $this->uri_dispatch();
-		
+		//require_once APP_PATH . 'models/nav_model.php';
+
 		$li = '<li><a href="/">Home</a></li>';
 		foreach ($nav as $navitem)
 		{
@@ -201,7 +268,13 @@ class Farmhand
 		
 		return $li;
 	}
+	
+	function title($sep)
+	{
+		$title = SITE_NAME . ' ' . $sep . ' Welcome';
+		return $title;
+	}
 
 }
 
-/* End of nancy.php */
+/* End of quaker.php */

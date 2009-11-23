@@ -4,13 +4,12 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title><?php echo $config['site_name']; ?></title>
-		
-	
-		<?php echo Core::stylesheets($config['styles']); ?>
+			
+		<?php echo Core::stylesheets(); ?>
 		
 	</head>
 	<body>
-		
+		<?php Core::demo(); ?>
 		<?php include($include); ?>
 		
 		<?php echo Core::google_analytics("11"); ?>

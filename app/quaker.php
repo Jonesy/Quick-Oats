@@ -23,7 +23,10 @@ function __autoload($classname)
 
 class Quaker
 {
+	# Global view
 	static $view;
+	# Global vars
+	static $config;
 	
 	function __construct()
 	{
@@ -61,9 +64,9 @@ class Quaker
 	 *
 	 *	@return string
 	 */
-	public static function layout($config)
+	public static function layout()
 	{
-		//If the template exists, load it, otherwise 404 it
+		# If the template exists, load it, otherwise 404 it
 		if (!self::$view)
 		{
 			$include = APP_PATH . "/views/index.php";
@@ -91,11 +94,14 @@ class Quaker
 	 */
 	public static function boil($config)
 	{
+		# Assign the global config array
+		self::$config = $config;
+		
 		# Get the URI
 		self::router();
 		
 		#Render the view
-		self::layout($config);
+		self::layout();
 	}
 }
 

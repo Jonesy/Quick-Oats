@@ -1,11 +1,12 @@
 <?php 
 
 $config['site_name'] = "Hello";
+
 /*
  *	STYLESHEETS
  *	-----------------------
  */
-$config['styles'] = array(
+$config['css'] = array(
 	array('master', 'screen, projection'),
 	array('print', 'print')
 );

@@ -1,7 +1,11 @@
 <?php
 
-class Core
+class Core extends Quaker
 {
+	function demo()
+	{
+		//print_r(self::$test);
+	}
 	/*
 	 *	STYLESHEETS
 	 *	-----------------------
@@ -10,8 +14,9 @@ class Core
 	 *
 	 *	@return string
 	 */
-	function stylesheets($styles)
+	function stylesheets()
 	{
+		$styles = self::$config['css'];
 		if (is_array($styles))
 		{
 			$css = "";

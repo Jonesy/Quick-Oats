@@ -2,7 +2,6 @@
 
 class Core extends Quaker
 {
-	static $page_title;
 	
 	function navigation()
 	{
@@ -14,7 +13,7 @@ class Core extends Quaker
 		if (!self::$uri)
 		{
 			$naver .= '<li class="active"><a href="/">Home</a></li>';
-			self::$page_title = "Home";
+			
 		}
 		else
 		{
@@ -27,7 +26,6 @@ class Core extends Quaker
 			if ($navitem[1] == self::$uri)
 			{
 				$naver .= '<li class="active">';
-				self::$page_title = $navitem[0];
 			}
 			else
 			{
@@ -43,7 +41,15 @@ class Core extends Quaker
 	
 	function title()
 	{
-		$title  = self::$config['site_name'];
+		if (!self::$uri)
+		{
+			$title = "Home";
+		}
+		else
+		{
+			$title = strtoupper(self::$uri[0]) . substr(self::$uri, 1);
+		}
+		$title  = self::$config['site_name'] . " | " . $title;
 		return $title;
 	}
 	

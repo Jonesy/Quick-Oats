@@ -8,11 +8,13 @@ error_reporting(E_ALL & ~E_STRICT);
 define('Version',	'0.1');
 define("APP_PATH",	dirname(dirname(__FILE__)) . "/app");
 
+include APP_PATH . '/models/config.php';
+
 # Put the pot on
-require APP_PATH . '/quaker.php';
+require_once APP_PATH . '/quaker.php';
 
 
 #Bring to boil
-Quaker::boil();
+Quaker::boil($config);
 
 # End of index.php

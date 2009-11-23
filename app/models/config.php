@@ -1,10 +1,11 @@
 <?php 
 
+$config['site_name'] = "Hello";
 /*
  *	STYLESHEETS
  *	-----------------------
  */
-$styles = array(
+$config['styles'] = array(
 	array('master', 'screen, projection'),
 	array('print', 'print')
 );
@@ -13,7 +14,7 @@ $styles = array(
  *	META TAGS
  *	-----------------------
  */
-$meta = array(
+$config['meta'] = array(
 	'description' => 'Demo website',
 	'keywords' => 'demo, website, php, oop',
 	'author' => 'Joshua R. Jones',

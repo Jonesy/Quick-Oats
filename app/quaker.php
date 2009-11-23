@@ -1,7 +1,7 @@
 <?php if (!defined('APP_PATH')) exit('No direct script access allowed');
 
 /*
- *	QUAKER OATS
+ *	INSTANT OATS
  *	By Joshua R. Jones
  *
  *	2009 (c) Copyright The General Metrics Web Development Company
@@ -18,22 +18,11 @@
 
 class Quaker
 {
+	static $uri_array;
+	
 	function __construct()
 	{
-		date_default_timezone_set('Vancouver/Pacific');
-		$fibre = new Harvest();
-		$fibre->layout();
-	}
-}
-
-class Harvest
-{
-	var $uri_array;
-	var $globs;
-	function __construct()
-	{
-		require_once APP_PATH . 'models/config.php';
-		$this->glob = $styles;
+		date_default_timezone_set('America/Vancouver');
 	}
 
 	/*
@@ -43,20 +32,26 @@ class Harvest
 	 *
 	 *	@return array
 	 */
-	function router()
+	public static function router()
 	{
-		$uri = $_SERVER['PATH_INFO'];
+		$uri = $_SERVER['REQUEST_URI'];
 		$slice = substr($uri, 1);
-		$this->uri_array = explode("/", $slice);
+		$uris = explode("/", $slice);
 		
-		foreach ($this->uri_array as $k => $v)
+		foreach ($uris as $k => $v)
 		{
 		  if (empty($v))
 		  {
-		  	unset($this->uri_array[$k]);
+		  	unset($uris[$k]);
 		  }
 		}
-		return $this->uri_array;
+		# Grab the last uri segment
+		self::$uri_array = end($uris);
+	}
+	
+	public static function demo()
+	{
+		return "Hello";
 	}
 	
 	/*
@@ -66,43 +61,162 @@ class Harvest
 	 *
 	 *	@return string
 	 */
-	function layout()
+	public static function layout()
 	{
-		
-	  // Load config file, helpers
-	  // Set up vars
-	  $files = $this->router();
-	  $template_file = end($files);
-	  
-	  foreach ($files as $k => $file)
-	  {
-	  	if (strlen($file) > 0)
-	  	{
-	  		$which = $file;
-	  	}
-	  }
+		//If the template exists, load it, otherwise 404 it
+		if (count(self::$uri_array) == 0)
+		{
+			$include = APP_PATH . "views/index.php";
+			$layout = include(APP_PATH . "views/layout.php");
+		}
+		else
+		{
+			if (file_exists(APP_PATH . "views/layout.php"))
+			{
+				$include = APP_PATH . "views/" . self::$uri_array . ".php";
+				$layout = include(APP_PATH . "views/layout.php");
+			}
+			else
+			{
+				header("HTTP/1.0 404 Not Found");
+				$layout = include(APP_PATH . "views/404.php");
+			}
+		}
+	}
 	
-	  //If the template exists, load it, otherwise 404 it
-	  if (count($files) == 0)
-	  {
-	  	$include = APP_PATH . "views/index.php";
-	  	$layout = include(APP_PATH . "views/layout.php");
-	  }
-	    else
-	  {
-	  	if (file_exists(APP_PATH . "views/" . $template_file . ".php"))
-	  	{
-	  		$include = APP_PATH . "views/" . $which . ".php";
-	  		$layout = include(APP_PATH . "views/layout.php");
-	  	}
-	  	   else
-	  	{
-	  		header("HTTP/1.0 404 Not Found");
-	  		$layout = include(APP_PATH . "views/404.php");
-	  	}
-	  }
+	function stylesheets($styles)
+	{
+		if (is_array($styles))
+		{
+			$css = "";
+			
+			foreach ($styles as $style)
+			{
+				$mod = filemtime(dirname(APP_PATH) . "/public/stylesheets/" . $style[0] . ".css");
+				$css .= '<link rel="stylesheet" href="/stylesheets/' . $style[0] . '.css';
+				$css .= '?' . $mod . '" ';
+				$css .= 'media="'. $style[1] . '" ';
+				$css .= 'type="text/css" />';
+				$css .= "\r\t\t";
+			}
+		}
+		return $css;
+	}
+	
+	/*
+	 *	JAVASCRIPTS
+	 *	-----------------------
+	 *	Load in 1 or more JavaScript files. Caching control is added in.
+	 *	Assigned in models/config.php
+	 *
+	 *	@return string
+	 */
+	function javascripts($js)
+	{
+		if (is_array($js))
+		{
+			$scriptfile = "";
+			
+			foreach ($js as $scripts)
+			{
+				$mod = filemtime(dirname(APP_PATH) . "public/javascripts/" . $scripts[0] . ".css");
+				$scriptfile .= '<script type="text/javascript" src="/javascripts/' . $scripts[0] . '.js';
+				$scriptfile .= '?' . $mod . '"';
+				$scriptfile .= '"></script>';
+				$scriptfile .= "\r";
+			}
+		}
+		return $scriptfile;
+	}
+	
+	/*
+	 *	META TAGS
+	 *	-----------------------
+	 *	Build out meta tags as defined in models/config.php
+	 *
+	 *	@return string
+	 */
+	function meta($meta)
+	{
+		$metatag;
+		
+		if (is_array($meta))
+		{
+			foreach ($meta as $k => $m)
+			{
+				if ($k == "author")
+				{
+					$metatag .= '<meta name="author" ';
+					$metatag .= 'content="' . $m . '" />';
+					$metatag .= "\r\t\t";
+				}
+				
+				if ($k == "keywords")
+				{
+					$metatag .= '<meta name="keywords" ';
+					$metatag .= 'content="' . $m . '" />';
+					$metatag .= "\r\t\t";
+				}
+				
+				if ($k == "description")
+				{
+					$metatag .= '<meta name="description" ';
+					$metatag .= 'content="' . $m . '" />';
+					$metatag .= "\r\t\t";
+				}
+				
+				if ($k == "copyright")
+				{
+					$metatag .= '<meta name="copyright" ';
+					$metatag .= 'content="' . $m . '" />';
+					$metatag .= "\r\t\t";
+				}
+				
+				if ($k == "robots")
+				{
+					$metatag .= '<meta name="robots" ';
+					$metatag .= 'content="' . $m . '" />';
+					$metatag .= "\r\t\t";
+				}
+			}
+		}
+		
+		return $metatag;
+	}
+	
+	/*
+	 *	Google Analytics
+	 *	-------------------------
+	 *	A cleaner way to insert Google Analytics code (legacy) in your website.
+	 *
+	 *	@return string
+	 */
+	 
+	function google_analytics($gid)
+	{
+		if ($gid)
+		{
+			$ga  = '<script type="text/javascript">';
+			$ga .= 'var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");';
+			$ga .= 'document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));';
+			$ga .= '</script><script type="text/javascript">';
+			$ga .= 'try {var pageTracker = _gat._getTracker("' . $gid . '");pageTracker._trackPageview();} catch(err) {}';
+			$ga .= '</script>';
+			$ga .= "\r";
+			return $ga;
+		}
+	}
+	
+	public static function boil()
+	{
+		# Get the URI
+		self::router();
+		
+		#Render the view
+		self::layout();
+		#print_r(self::$uri_array);
 	}
 }
 
 
-/* End of quaker.php */
+# End of quaker.php

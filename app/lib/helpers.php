@@ -25,7 +25,7 @@ class Farmhand
 			
 			foreach ($styles as $style)
 			{
-				$mod = filemtime(PUBLIC_PATH . "public/stylesheets/" . $style[0] . ".css");
+				$mod = filemtime(dirname(APP_PATH) . "public/stylesheets/" . $style[0] . ".css");
 				$css .= '<link rel="stylesheet" href="/stylesheets/' . $style[0] . '.css';
 				$css .= '?' . $mod . '" ';
 				$css .= 'media="'. $style[1] . '" ';
@@ -52,7 +52,7 @@ class Farmhand
 			
 			foreach ($js as $scripts)
 			{
-				$mod = filemtime(PUBLIC_PATH . "public/javascripts/" . $scripts[0] . ".css");
+				$mod = filemtime(dirname(APP_PATH) . "public/javascripts/" . $scripts[0] . ".css");
 				$scriptfile .= '<script type="text/javascript" src="/javascripts/' . $scripts[0] . '.js';
 				$scriptfile .= '?' . $mod . '"';
 				$scriptfile .= '"></script>';

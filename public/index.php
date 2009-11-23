@@ -1,15 +1,19 @@
 <?php
 
-error_reporting(E_ALL);
+# Error Reporting
+ini_set('display_errors', TRUE);
+error_reporting(E_ALL & ~E_STRICT);
 
-define('Version',			'0.1');
-define('SITE_NAME',			'Demo Site');
-define("PUBLIC_PATH",		dirname(dirname(__FILE__)) . "/");
-define("APP_PATH",			dirname(dirname(__FILE__)) . "/app/");
+# Define some stuff
+define('Version',	'0.1');
+define("APP_PATH",	dirname(dirname(__FILE__)) . "/app/");
 
-require_once APP_PATH . 'quaker.php';
+# Put the pot on
+require APP_PATH . '/lib/helpers.php';
+require APP_PATH . 'quaker.php';
 
-$oats = new Quaker();
 
+#Bring to boil
+Quaker::boil();
 
-/* End of index.php */
+# End of index.php

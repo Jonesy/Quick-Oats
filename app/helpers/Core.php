@@ -2,10 +2,51 @@
 
 class Core extends Quaker
 {
-	function demo()
+	static $page_title;
+	
+	function navigation()
 	{
-		//print_r(self::$test);
+		$nav = self::$config['site_map'];
+		
+		$naver = '<ul>';
+		
+		# If on the home page
+		if (!self::$uri)
+		{
+			$naver .= '<li class="active"><a href="/">Home</a></li>';
+			self::$page_title = "Home";
+		}
+		else
+		{
+			$naver .= '<li><a href="/">Home</a></li>';
+		}
+		
+		# Build out rest of the navigation
+		foreach ($nav as $navitem)
+		{
+			if ($navitem[1] == self::$uri)
+			{
+				$naver .= '<li class="active">';
+				self::$page_title = $navitem[0];
+			}
+			else
+			{
+				$naver .= '<li>';
+			}
+			$naver .= '<a href="/' . $navitem[1] . '">' . $navitem[0] . '</a></li>';
+		}
+		$naver .= '</ul>';
+		$naver .= "\r";
+		
+		return $naver;
 	}
+	
+	function title()
+	{
+		$title  = self::$config['site_name'];
+		return $title;
+	}
+	
 	/*
 	 *	STYLESHEETS
 	 *	-----------------------
@@ -16,22 +57,25 @@ class Core extends Quaker
 	 */
 	function stylesheets()
 	{
-		$styles = self::$config['css'];
-		if (is_array($styles))
+		if (isset(self::$config['css']))
 		{
-			$css = "";
-			
-			foreach ($styles as $style)
+			$styles = self::$config['css'];
+			if (is_array($styles))
 			{
-				$mod = filemtime(dirname(APP_PATH) . "/public/stylesheets/" . $style[0] . ".css");
-				$css .= '<link rel="stylesheet" href="/stylesheets/' . $style[0] . '.css';
-				$css .= '?' . $mod . '" ';
-				$css .= 'media="'. $style[1] . '" ';
-				$css .= 'type="text/css" />';
-				$css .= "\r\t\t";
+				$css = "";
+				
+				foreach ($styles as $style)
+				{
+					$mod = filemtime(dirname(APP_PATH) . "/public/stylesheets/" . $style[0] . ".css");
+					$css .= '<link rel="stylesheet" href="/stylesheets/' . $style[0] . '.css';
+					$css .= '?' . $mod . '" ';
+					$css .= 'media="'. $style[1] . '" ';
+					$css .= 'type="text/css" />';
+					$css .= "\r\t\t";
+				}
 			}
+			return $css;
 		}
-		return $css;
 	}
 	
 	/*
@@ -42,22 +86,27 @@ class Core extends Quaker
 	 *
 	 *	@return string
 	 */
-	function javascripts($js)
+	function javascripts()
 	{
-		if (is_array($js))
+		if (isset(self::$config['js']))
 		{
-			$scriptfile = "";
+			$js = self::$config['js'];
 			
-			foreach ($js as $scripts)
+			if (is_array($js))
 			{
-				$mod = filemtime(dirname(APP_PATH) . "/public/javascripts/" . $scripts[0] . ".css");
-				$scriptfile .= '<script type="text/javascript" src="/javascripts/' . $scripts[0] . '.js';
-				$scriptfile .= '?' . $mod . '"';
-				$scriptfile .= '"></script>';
-				$scriptfile .= "\r";
+				$scriptfile = "";
+				
+				foreach ($js as $scripts)
+				{
+					$mod = filemtime(dirname(APP_PATH) . "/public/javascripts/" . $scripts[0] . ".css");
+					$scriptfile .= '<script type="text/javascript" src="/javascripts/' . $scripts[0] . '.js';
+					$scriptfile .= '?' . $mod . '"';
+					$scriptfile .= '"></script>';
+					$scriptfile .= "\r";
+				}
 			}
+			return $scriptfile;
 		}
-		return $scriptfile;
 	}
 	
 	/*
@@ -67,52 +116,56 @@ class Core extends Quaker
 	 *
 	 *	@return string
 	 */
-	function meta($meta)
+	function meta()
 	{
-		$metatag;
-		
-		if (is_array($meta))
+		if (isset(self::$config['meta']))
 		{
-			foreach ($meta as $k => $m)
+			$meta = self::$config['meta'];
+			$metatag = "";
+			
+			if (is_array($meta))
 			{
-				if ($k == "author")
+				foreach ($meta as $k => $m)
 				{
-					$metatag .= '<meta name="author" ';
-					$metatag .= 'content="' . $m . '" />';
-					$metatag .= "\r\t\t";
-				}
-				
-				if ($k == "keywords")
-				{
-					$metatag .= '<meta name="keywords" ';
-					$metatag .= 'content="' . $m . '" />';
-					$metatag .= "\r\t\t";
-				}
-				
-				if ($k == "description")
-				{
-					$metatag .= '<meta name="description" ';
-					$metatag .= 'content="' . $m . '" />';
-					$metatag .= "\r\t\t";
-				}
-				
-				if ($k == "copyright")
-				{
-					$metatag .= '<meta name="copyright" ';
-					$metatag .= 'content="' . $m . '" />';
-					$metatag .= "\r\t\t";
-				}
-				
-				if ($k == "robots")
-				{
-					$metatag .= '<meta name="robots" ';
-					$metatag .= 'content="' . $m . '" />';
-					$metatag .= "\r\t\t";
+					if ($k == "author")
+					{
+						$metatag .= '<meta name="author" ';
+						$metatag .= 'content="' . $m . '" />';
+						$metatag .= "\r\t\t";
+					}
+					
+					if ($k == "keywords")
+					{
+						$metatag .= '<meta name="keywords" ';
+						$metatag .= 'content="' . $m . '" />';
+						$metatag .= "\r\t\t";
+					}
+					
+					if ($k == "description")
+					{
+						$metatag .= '<meta name="description" ';
+						$metatag .= 'content="' . $m . '" />';
+						$metatag .= "\r\t\t";
+					}
+					
+					if ($k == "copyright")
+					{
+						$metatag .= '<meta name="copyright" ';
+						$metatag .= 'content="' . $m . '" />';
+						$metatag .= "\r\t\t";
+					}
+					
+					if ($k == "robots")
+					{
+						$metatag .= '<meta name="robots" ';
+						$metatag .= 'content="' . $m . '" />';
+						$metatag .= "\r\t\t";
+					}
 				}
 			}
+			
+			return $metatag;
 		}
-		
-		return $metatag;
 	}
 	
 	/*
@@ -123,8 +176,9 @@ class Core extends Quaker
 	 *	@return string
 	 */
 	 
-	function google_analytics($gid)
+	function google_analytics()
 	{
+		$gid = self::$config['google_analytics'];
 		if ($gid)
 		{
 			$ga  = '<script type="text/javascript">';

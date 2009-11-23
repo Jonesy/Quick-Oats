@@ -17,5 +17,6 @@
 		
 		<?php include($include); ?>
 		
+		<?php echo Quaker::google_analytics("11"); ?>
 	</body>
 </html>

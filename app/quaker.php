@@ -49,11 +49,6 @@ class Quaker
 		self::$uri_array = end($uris);
 	}
 	
-	public static function demo()
-	{
-		return "Hello";
-	}
-	
 	/*
 	 *	LAYOUT
 	 *	-----------------------
@@ -64,26 +59,39 @@ class Quaker
 	public static function layout()
 	{
 		//If the template exists, load it, otherwise 404 it
-		if (count(self::$uri_array) == 0)
+		if (!self::$uri_array)
 		{
-			$include = APP_PATH . "views/index.php";
-			$layout = include(APP_PATH . "views/layout.php");
+			$include = APP_PATH . "/views/index.php";
+			$layout = include(APP_PATH . "/views/layout.php");
 		}
 		else
 		{
-			if (file_exists(APP_PATH . "views/layout.php"))
+			if (file_exists(APP_PATH . "/views/layout.php"))
 			{
-				$include = APP_PATH . "views/" . self::$uri_array . ".php";
-				$layout = include(APP_PATH . "views/layout.php");
+				$include = APP_PATH . "/views/" . self::$uri_array . ".php";
+				$layout = include(APP_PATH . "/views/layout.php");
 			}
 			else
 			{
 				header("HTTP/1.0 404 Not Found");
-				$layout = include(APP_PATH . "views/404.php");
+				$layout = include(APP_PATH . "/views/404.php");
 			}
 		}
 	}
 	
+	/*	******************************************
+	 *	HELPERS
+	 *	------------------------------------------
+	 */
+	
+	/*
+	 *	STYLESHEETS
+	 *	-----------------------
+	 *	Load in 1 or more CSS files. Caching control is added in.
+	 *	Assigned in models/config.php
+	 *
+	 *	@return string
+	 */
 	function stylesheets($styles)
 	{
 		if (is_array($styles))
@@ -119,7 +127,7 @@ class Quaker
 			
 			foreach ($js as $scripts)
 			{
-				$mod = filemtime(dirname(APP_PATH) . "public/javascripts/" . $scripts[0] . ".css");
+				$mod = filemtime(dirname(APP_PATH) . "/public/javascripts/" . $scripts[0] . ".css");
 				$scriptfile .= '<script type="text/javascript" src="/javascripts/' . $scripts[0] . '.js';
 				$scriptfile .= '?' . $mod . '"';
 				$scriptfile .= '"></script>';
@@ -207,6 +215,11 @@ class Quaker
 		}
 	}
 	
+	/*
+	 *	BOIL!
+	 *	-----------------------
+	 *	And bring to a boil
+	 */
 	public static function boil()
 	{
 		# Get the URI

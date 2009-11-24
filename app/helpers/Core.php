@@ -1,44 +1,69 @@
 <?php
 
+/*
+ * Core
+ * Extends the Oats class to install some out-of-the-box
+ * features, such as:
+ *   * Navigation builder
+ *   * Page titles
+ *   * Stylesheets files
+ *   * Javascript files
+ *   * Meta Tags
+ *   * Google Analytics
+ */
+
 class Core extends Oats
 {
-	
+	/*
+	 *	Navigation
+	 *	-----------------------
+	 *	Load in 1 or more CSS files. Caching control is added in.
+	 *	Assigned in config.php
+	 *
+	 *	@return string
+	 */
 	function navigation()
 	{
-		$nav = self::$config['site_map'];
+		$sitemap = self::$config['site_map'];
 		
-		$naver = '<ul>';
+		$nav = '<ul>';
 		
 		# If on the home page
 		if (!self::$uri)
 		{
-			$naver .= '<li class="active"><a href="/">Home</a></li>';
-			
+			$nav .= '<li class="active"><a href="/">Home</a></li>';
 		}
 		else
 		{
-			$naver .= '<li><a href="/">Home</a></li>';
+			$nav .= '<li><a href="/">Home</a></li>';
 		}
 		
 		# Build out rest of the navigation
-		foreach ($nav as $navitem)
+		foreach ($sitemap as $navitem)
 		{
 			if ($navitem[1] == self::$uri)
 			{
-				$naver .= '<li class="active">';
+				$nav .= '<li class="active">';
 			}
 			else
 			{
-				$naver .= '<li>';
+				$nav .= '<li>';
 			}
-			$naver .= '<a href="/' . $navitem[1] . '">' . $navitem[0] . '</a></li>';
+			$nav .= '<a href="/' . $navitem[1] . '">' . $navitem[0] . '</a></li>';
 		}
-		$naver .= '</ul>';
-		$naver .= "\r";
+		$nav .= '</ul>';
+		$nav .= "\r";
 		
-		return $naver;
+		return $nav;
 	}
 	
+	/*
+	 *	Page title
+	 *	-----------------------
+	 *	Load the site name (defined in config.php) and the page title.
+	 *
+	 *	@return string
+	 */
 	function title()
 	{
 		if (!self::$uri)
@@ -54,10 +79,10 @@ class Core extends Oats
 	}
 	
 	/*
-	 *	STYLESHEETS
+	 *	Stylesheets
 	 *	-----------------------
-	 *	Load in 1 or more CSS files. Caching control is added in.
-	 *	Assigned in models/config.php
+	 *	Load in 1 or more CSS files. Caching control is included.
+	 *	Assigned in config.php
 	 *
 	 *	@return string
 	 */
@@ -85,10 +110,10 @@ class Core extends Oats
 	}
 	
 	/*
-	 *	JAVASCRIPTS
+	 *	Javascripts
 	 *	-----------------------
-	 *	Load in 1 or more JavaScript files. Caching control is added in.
-	 *	Assigned in models/config.php
+	 *	Load in 1 or more JavaScript files. Caching control is included.
+	 *	Assigned in config.php
 	 *
 	 *	@return string
 	 */
@@ -116,9 +141,9 @@ class Core extends Oats
 	}
 	
 	/*
-	 *	META TAGS
+	 *	Meta
 	 *	-----------------------
-	 *	Build out meta tags as defined in models/config.php
+	 *	Build out meta tags as defined in config.php
 	 *
 	 *	@return string
 	 */
@@ -169,17 +194,17 @@ class Core extends Oats
 					}
 				}
 			}
-			
 			return $metatag;
 		}
 	}
 	
 	/*
-	 *	Google Analytics
-	 *	-------------------------
-	 *	A cleaner way to insert Google Analytics code (legacy) in your website.
+	 * Google Analytics
+	 * -------------------------
+	 * A cleaner way to insert Google Analytics code (legacy) in 
+	 * your website. Requires code to be entered in config.php
 	 *
-	 *	@return string
+	 * @return string
 	 */
 	 
 	function google_analytics()
@@ -198,3 +223,5 @@ class Core extends Oats
 		}
 	}
 }
+
+# End of Core.php

@@ -1,16 +1,17 @@
 <?php if (!defined('APP_PATH')) exit('No direct script access allowed');
 
 /*
- *	Quick Oats
- *	By Joshua R. Jones
+ * Quick Oats
+ * By Joshua R. Jones
  *
- *	2009 (c) Copyright The General Metrics Web Development Company
- *	License is do whatever you want.
+ * 2009 (c) Copyright The General Metrics Web Development Company
+ * License is do whatever you want. Legit, official open source license
+ * coming soon.
  *
  */
 
 /*
- *	Autoload the helpers. Core is supplied with a bevy of features. 
+ * Autoload the helpers. Core is supplied with a bevy of features. 
  */
 function __autoload($classname)
 {
@@ -33,11 +34,11 @@ class Oats
 	}
 
 	/*
-	 *	Router
-	 *	-----------------------
-	 *	Interpert the incoming URI
-	 *
-	 *	@return array
+	 * Router
+	 * -----------------------
+	 * Interpert the incoming URI
+	 * 
+	 * @return array
 	 */
 	public static function router()
 	{
@@ -66,11 +67,11 @@ class Oats
 	}
 	
 	/*
-	 *	LAYOUT
-	 *	-----------------------
-	 *	Load the default layout field
-	 *
-	 *	@return string
+	 * Layout
+	 * -----------------------
+	 * Load the default layout field
+	 * 
+	 * @return string
 	 */
 	public static function layout()
 	{
@@ -96,9 +97,9 @@ class Oats
 	}
 	
 	/*
-	 *	BOIL!
-	 *	-----------------------
-	 *	And bring to a boil for 2 minutes, and enjoy!
+	 * BOIL!
+	 * -----------------------
+	 * And bring to a boil for 2 minutes, and enjoy!
 	 */
 	public static function boil($config)
 	{

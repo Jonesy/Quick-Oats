@@ -1,7 +1,17 @@
 <?php 
 
+/*
+ * Site Name
+ * -----------------------
+ * Set your site name for the <title> tag.
+ */
 $config['site_name'] = "Demo Site";
 
+/*
+ * Site Map
+ * -----------------------
+ * Layout your navigation.
+ */
 $config['site_map'] = array(
 	array(
 		'Hello', 'hello',
@@ -12,8 +22,11 @@ $config['site_map'] = array(
 );
 
 /*
- *	STYLESHEETS
- *	-----------------------
+ * Stylesheets
+ * -----------------------
+ * Set up your stylesheets, in order of how you'd like them to appear,
+ * 
+ * [filename], [type]
  */
 $config['css'] = array(
 	array('master', 'screen, projection'),
@@ -21,8 +34,10 @@ $config['css'] = array(
 );
 
 /*
- *	META TAGS
- *	-----------------------
+ * Meta Tags
+ * -----------------------
+ * Set up your metatags.
+ * [type], [content]
  */
 $config['meta'] = array(
 	'description' => 'Demo website',
@@ -32,4 +47,12 @@ $config['meta'] = array(
 	'robots' => 'index, nofollow'
 );
 
+/*
+ * Google Analytics
+ * -----------------------
+ * If applicable, enter your Google Analytics code, and it will be inserted
+ * right before the </body> tag.
+ * 
+ * [filename], [type]
+ */
 $config['google_analytics'] = "11-11111";

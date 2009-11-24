@@ -1,6 +1,6 @@
 <?php
 
-class Core extends Quaker
+class Core extends Oats
 {
 	
 	function navigation()

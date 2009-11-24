@@ -24,7 +24,8 @@ function __autoload($classname)
 	require APP_PATH . "/helpers/" . $classname . ".php";
 }
 
-class Quaker
+
+class Oats
 {
 	# Global view
 	static $uri;
@@ -118,4 +119,4 @@ class Quaker
 }
 
 
-# End of quaker.php
+# End of oats.php

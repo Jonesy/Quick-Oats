@@ -12,9 +12,9 @@ define("APP_PATH",	dirname(dirname(__FILE__)) . "/app");
 include APP_PATH . '/config.php';
 
 # Add Quick Oats
-require_once APP_PATH . '/quaker.php';
+require_once APP_PATH . '/oats.php';
 
 # Bring to boil
-Quaker::boil($config);
+Oats::boil($config);
 
 # End of index.php

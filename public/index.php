@@ -12,7 +12,7 @@ define("APP_PATH",	dirname(dirname(__FILE__)) . "/app");
 include APP_PATH . '/config.php';
 
 # Add Quick Oats
-require_once APP_PATH . '/oats.php';
+require_once APP_PATH . '/Oats.php';
 
 # Bring to boil
 Oats::boil($config);

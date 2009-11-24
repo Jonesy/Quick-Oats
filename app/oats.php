@@ -1,20 +1,13 @@
 <?php if (!defined('APP_PATH')) exit('No direct script access allowed');
 
 /*
- *	INSTANT OATS
+ *	Quick Oats
  *	By Joshua R. Jones
  *
  *	2009 (c) Copyright The General Metrics Web Development Company
  *	License is do whatever you want.
  *
- *	== TODO =====================================================
- *	=	* Google Sitemap builder
- *	=	* Navigation builder
- *	=	* Mailer
- *	=	* Form builder
- *	=	* Environments
- *	=============================================================
-*/
+ */
 
 /*
  *	Autoload the helpers. Core is supplied with a bevy of features. 
@@ -24,7 +17,9 @@ function __autoload($classname)
 	require APP_PATH . "/helpers/" . $classname . ".php";
 }
 
-
+/*
+ * The master class
+ */
 class Oats
 {
 	# Global view

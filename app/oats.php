@@ -69,7 +69,8 @@ class Oats
 	/*
 	 * Layout
 	 * -----------------------
-	 * Load the default layout field
+	 * Loads the default view as well as the view file that corresponds
+	 * with the last URI segment as determined by the router() function.
 	 * 
 	 * @return string
 	 */

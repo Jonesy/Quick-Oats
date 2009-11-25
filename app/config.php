@@ -8,10 +8,27 @@
 $config['site_name'] = "Demo Site";
 
 /*
+ * Staging URL
+ * -----------------------
+ */
+$config['staging_url'] = "quaker.local";
+
+/*
+ * Production URL
+ * -----------------------
+ */
+$config['live_url'] = "example.com";
+
+/*
  * Site Map
  * -----------------------
  * Layout your navigation.
  */
+# If you want the homepage included in the navigation,
+# enter it here.
+$config['home_in_nav'] = "";
+
+# The rest of the navigation
 $config['site_map'] = array(
 	array(
 		'Hello', 'hello',

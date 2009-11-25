@@ -25,19 +25,25 @@ class Core extends Oats
 	function navigation()
 	{
 		$sitemap = self::$config['site_map'];
-		
+		$home_name = self::$config['home_in_nav'];
 		$nav = '<ul>';
 		
 		# If on the home page
-		if (!self::$uri)
+		if ($home_name == "")
 		{
-			$nav .= '<li class="active"><a href="/">Home</a></li>';
+			
 		}
 		else
 		{
-			$nav .= '<li><a href="/">Home</a></li>';
+			if (!self::$uri )
+			{
+				$nav .= '<li class="active">';
+			}
+			else
+			{
+				$nav .= '<li><a href="/">' . $home_name . '</a></li>';
+			}
 		}
-		
 		# Build out rest of the navigation
 		foreach ($sitemap as $navitem)
 		{
@@ -202,24 +208,30 @@ class Core extends Oats
 	 * Google Analytics
 	 * -------------------------
 	 * A cleaner way to insert Google Analytics code (legacy) in 
-	 * your website. Requires code to be entered in config.php
+	 * your website. Requires code to be entered in config.php and
+	 * checks to make sure that it is only rendered on the live server.
 	 *
 	 * @return string
 	 */
-	 
 	function google_analytics()
 	{
-		$gid = self::$config['google_analytics'];
-		if ($gid)
+		if (isset(self::$config['staging_url']))
 		{
-			$ga  = '<script type="text/javascript">';
-			$ga .= 'var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");';
-			$ga .= 'document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));';
-			$ga .= '</script><script type="text/javascript">';
-			$ga .= 'try {var pageTracker = _gat._getTracker("' . $gid . '");pageTracker._trackPageview();} catch(err) {}';
-			$ga .= '</script>';
-			$ga .= "\r";
-			return $ga;
+			if (self::$config['live_url'] == $_SERVER['SERVER_NAME'])
+			{
+				$gid = self::$config['google_analytics'];
+				if ($gid)
+				{
+					$ga  = '<script type="text/javascript">';
+					$ga .= 'var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");';
+					$ga .= 'document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));';
+					$ga .= '</script><script type="text/javascript">';
+					$ga .= 'try {var pageTracker = _gat._getTracker("' . $gid . '");pageTracker._trackPageview();} catch(err) {}';
+					$ga .= '</script>';
+					$ga .= "\r";
+					return $ga;
+				}
+			}
 		}
 	}
 }

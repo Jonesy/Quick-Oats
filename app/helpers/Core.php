@@ -37,7 +37,7 @@ class Core extends Oats
 		{
 			if (!self::$uri )
 			{
-				$nav .= '<li class="active">';
+				$nav .= '<li class="active"><a href="/">' . $home_name . '</a></li>';
 			}
 			else
 			{

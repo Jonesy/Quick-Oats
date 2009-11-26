@@ -26,7 +26,7 @@ $config['live_url'] = "example.com";
  */
 # If you want the homepage included in the navigation,
 # enter it here.
-$config['home_in_nav'] = "";
+$config['home_in_nav'] = "Home Run";
 
 # The rest of the navigation
 $config['site_map'] = array(

@@ -1,7 +1,7 @@
 Quick Oats
 ==========
 
-## Small framework, rich in fibre ##
+## A small PHP framework, rich in fibre ##
 
 **Quick Oats** is a simple framework for websites that are too small to employ databases, large frameworks and blog software, but you still want some simple helpers and clean URL's;
 
